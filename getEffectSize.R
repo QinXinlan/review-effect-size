@@ -10,7 +10,8 @@ library(matrixStats)
 library(metaviz)
 
 # Save data folder
-savePath <- 'your-path-to-data'
+# savePath <- 'your-path-to-data'
+savePath <- '/media/qinxinlan/MoreSpace/BCI/Papers/My papers/Paper Review Channel Selection/Figures/'
 
 ## Global Variables
 Png <- '.png'; Csv <- '.csv'
@@ -415,48 +416,6 @@ getEffectSizeME <- function(SumElec, Z_crit){
 
   return(list(Agg, d))
 
-}
-
-# Calculate Cohen's d for SSVEP
-getEffectSizeSSVEP <- function(SumElec, Z_crit){
-  d <- NULL
-  ## From "Steady-state visual evoked potentials - distributed local sources and wave-like dynamics are sensitive to flicker frequency"
-  # From Figure 5
-  # At 10 Hz
-  Elec <- c('CZ', 'CPZ', 'P1', 'PZ', 'P2', 'PO3', 'POZ', 'PO4', 'CB1',
-            'O1', 'OZ', 'O2' )
-  Potential <- c(8, 6, 2, 7, 6, 6, 4, 4, 8, 9, 12, 6 )
-  Dt10 <- data.table(Elec, '10 Hz' = Potential, key = 'Elec')
-  # At 11 Hz
-  Elec <- c('P1', 'PZ', 'P2', 'PO3', 'POZ', 'PO4', 'O1', 'OZ', 'O2' )
-  Potential <- c(4, 8, 10, 8, 16, 10, 6, 16, 7 )
-  Dt11 <- data.table(Elec, '11 Hz' = Potential, key = 'Elec' )
-  # At 12 Hz
-  Elec <- c('F1', 'FZ', 'P3', 'P1', 'PZ', 'P2', 'P4', 'PO3', 'POZ', 'PO4',
-            'PO5', 'PO6', 'CB1', 'O1', 'OZ', 'O2' )
-  Potential <- c(4, 4, 10, 12, 8, 6, 8, 16, 18, 10, 12, 8, 8, 12, 20, 12 )
-  Dt12 <- data.table(Elec, '12 Hz' = Potential, key = 'Elec' )
-  # At 13 Hz
-  Elec <- c('F6', 'F8', 'FC6', 'FT8', 'P3', 'P1', 'PZ', 'P2', 'PO5', 'PO3',
-            'POZ', 'PO4', 'PO6', 'PO8', 'CB1', 'O1', 'OZ', 'O2', 'CB2' )
-  Potential <- c(6, 8, 6, 8, 7, 9, 10, 8, 12, 16, 14, 10, 8, 7, 7, 14,
-                 16, 14, 7 )
-  Dt13 <- data.table(Elec, '13 Hz' = Potential, key = 'Elec' )
-  Dt <- merge(merge(merge(Dt10, Dt11), Dt12), Dt13)
-  Dt <- cbind(Dt, Mean = rowMeans(Dt[,2:ncol(Dt)]), SD = rowSds(as.matrix(Dt[,2:ncol(Dt)])) )
-  # CI for 95%: two-tailed
-  # d +/- d_sd*Z_crit
-  Dt <- cbind(Dt, M_CI_low = Dt$Mean - Z_crit*Dt$SD, M_CI_high = Dt$Mean + Z_crit*Dt$SD )
-  Dt <- cbind(Dt, d = Dt$Mean/Dt$SD , CI = 0.95, CI_low = Dt$M_CI_low/Dt$SD, CI_high = Dt$M_CI_high/Dt$SD )
-  # number of trials not found in paper
-  d[['SSVEP_distributed']] <- cbind( Subjects = 9, Trials = 'NF', Dt[,c('Elec', 'd', 'CI', 'CI_low', 'CI_high')] )
-  
-  checkElec(d, SumElec)
-  
-  Agg <- getAgg(d, SumElec)
-  
-  return(list(Agg, d))
-  
 }
 
 # Calculate Cohen's for P300
@@ -878,13 +837,6 @@ ME <- Res[[1]]
 d <- Res[[2]]
 Means_ME <- metaAnalysis('ME', ME, d, Z_crit, boolPlot = F, boolSave = T, savePath)
 
-## SVEP
-SumElec <- c( 'P1', 'PZ', 'P2', 'PO3', 'POZ', 'PO4', 'O1', 'OZ', 'O2' )
-Res <- getEffectSizeSSVEP(SumElec, Z_crit)
-SSVEP <- Res[[1]]
-d <- Res[[2]]
-Means_SSVEP <- metaAnalysis('SSVEP', SSVEP, d, Z_crit, boolPlot = F, boolSave = T, savePath)
-
 ## P300
 SumElec <- c( 'F5, FC5', 'F3, AF3', 'F4, AF4', 'F8', 'FC1, FC3',
               'FC4', 'FZ, FPZ', 'FCZ', 'FCZ', 'C2',
@@ -896,5 +848,3 @@ Res <- getEffectSizeP300(SumElec, Z_crit)
 P300 <- Res[[1]]
 d <- Res[[2]]
 Means_P300 <- metaAnalysis('P300', P300, d, Z_crit, boolPlot = F, boolSave = T, savePath)
-
-
