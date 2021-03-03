@@ -873,8 +873,8 @@ Means_MI <- metaAnalysis('MI', MI, d, boolPlot = F, boolSave = T)
 
 
 ### Motor Execution
-SumElec <- c( 'F8', 'FC5', 'FC4, FC2', 'FC1, FC3', 'FCZ, FZ', 'FCZ, FZ',
-              'FCZ, FZ', 'FCZ, FZ', 'C2', 'C1', 'C4', 'C3', 'CPZ, CZ', 'CP2',
+SumElec <- c( 'F8', 'FC5', 'FC4, FC2', 'FC1, FC3', 'FCZ', 'FCZ',
+              'FCZ', 'FCZ', 'C2', 'C1', 'C4', 'C3', 'CPZ, CZ', 'CP2',
               'CP1', 'CP4', 'CP3', 'CP6', 'CP5' )
 Res <- getEffectSizeME(SumElec, Z_crit)
 ME <- Res[[1]]
