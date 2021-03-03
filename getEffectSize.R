@@ -9,7 +9,14 @@ library(ggpubr)
 library(matrixStats)
 library(metaviz)
 
+# Save data folder
+savePath <- 'your-path-to-data'
+
+## Global Variables
 Png <- '.png'; Csv <- '.csv'
+Z_crit <- 1.96 # for two-tailed; 1.65 for one-tailed
+
+## Functions
 # Check if all elec in SumElec correspond to the ones in d
 checkElec <- function(d, SumElec){
   ## Check if all electrodes in SumElec have been used in d
@@ -23,7 +30,7 @@ checkElec <- function(d, SumElec){
 
   if( length(setdiff(AllElec, SElec)) + length(setdiff(SElec, AllElec)) != 0 ){
     if( length(setdiff(AllElec, SElec)) > 0 ){ print('Problem with Elec from d: '); print(setdiff(AllElec, SElec)) }
-    if( length(setdiff(SElec, AllElec)) > 0 ){ print('Problem with SumElec: '); print(setdiff(SElec, AllElec)) }
+    if( length(setdiff(SElec, AllElec)) > 0 ){ print('No data for: '); print(setdiff(SElec, AllElec)) }
   }else{
     print('OK')
   }
@@ -261,8 +268,8 @@ getEffectSizeME <- function(SumElec, Z_crit){
   # Executed movement with rest compared
   Z2 <- c( 5.62, 7.14, 6.55, 5.67, 5.19, 5.11, 4.37, 4.59, 6.01, 5.03, 4.94, 4,
            3.66, 4.95, 3.95, 3.93, 4.7, 5.73, 3.25, 4.2, 4.83, 4.67, 5.35, 6.23 )
-  Elec <- c('F8', 'C2', 'C1', 'FC2, FC4', 'FC1', 'FCZ, FZ', 'FC3', 'FC2, FCZ, FZ',
-            'FC1, FCZ, FZ', 'C4', 'C3', 'CP2', 'CP1', 'CP3', 'CP6', 'CP5', 'NP',
+  Elec <- c('F8', 'C2', 'C1', 'FC2, FC4', 'FC1', 'FCZ', 'FC3', 'FC2, FCZ',
+            'FC1, FCZ', 'C4', 'C3', 'CP2', 'CP1', 'CP3', 'CP6', 'CP5', 'NP',
             'NP', 'NP', 'NP', 'NP', 'NP', 'NP', 'NP' )
 
   # eight right-handed healthy volunteers
@@ -478,9 +485,6 @@ getEffectSizeP300 <- function(SumElec, Z_crit){
   # 
   # Elec <- c( 'C3', 'P3', 'P4', 'O1', 'O2' )
   # 
-  # # CI for 95%
-  # Z_crit <- 1.96
-  # 
   # d[['BCI']] <- data.table( Subjects = 8, Trials = 34, Elec = Elec, d = (AmpP300-AmpNoP300)/mean(AmpSD), 
   #                            CI = 0.95, 
   #                            CI_low = ((AmpP300-AmpNoP300)-Z_crit*mean(AmpSD))/mean(AmpSD),
@@ -664,12 +668,8 @@ ForestPlot <- function( toPlot , El, boolPlot = T, boolSave = F, nameFile = "" )
 }
 
 # Meta-analysis
-metaAnalysis <- function(nameTask, Agg, d, boolPlot = F, boolSave = F){ # boolPlot = F; boolSave = F
-  # nameTask <- 'MI'; Agg <- MI
-  # nameTask <- 'ME'; Agg <- ME
-  # nameTask <- 'SSVEP'; Agg <- SSVEP
-  # nameTask <- 'P300'; Agg <- P300
-  savePath <- paste0('/media/qinxinlan/MoreSpace/BCI/Papers/My papers/Paper Review Channel Selection/Figures/Cohen_', nameTask )
+metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, savePath){ 
+  savePath <- file.path(savePath, paste0( 'Cohen_' , nameTask))
   if(boolSave && !dir.exists(savePath)){ dir.create(savePath) }
   
   for(nr in 1:nrow(Agg)){ # nr <- 1
@@ -702,18 +702,16 @@ metaAnalysis <- function(nameTask, Agg, d, boolPlot = F, boolSave = F){ # boolPl
       }else if(nh == "Right"){ Symbols <- c(Symbols , "▶" )
       }else{ Symbols <- c(Symbols , "◀▶" ) } }
     # the 95% confidence interval is 3.92 standard errors wide (3.92 = 2 × 1.96).
-    # Z_crit <- 1.96 # for two-tailed; 1.65 for one-tailed
-    Z_crit <- 1.96*2
     # CI = Cohen_d +/- SD*Z_crit
     # Standard error = Standard Dev / sqrt(N)
-    # SD = sqrt(N) * (upper limit - lower limit) / 3.92
-    # SE = (upper limit - lower limit) / 3.92
+    # SD = sqrt(N) * (upper limit - lower limit) / (Z_crit*2)
+    # SE = (upper limit - lower limit) / (Z_crit*2)
     myText <- NULL; for(nr in 1:nrow(nA)){ myText <- c( myText, 
                                                         paste0(round(nA$d[nr], digits = 2), ' [',
                                                                round(nA$CI_low[nr], digits = 2), ' ; ', 
                                                                round(nA$CI_high[nr], digits = 2), '] ' ) ) }
     
-    nA <- cbind(nA, data.table(Text = myText, SE = ( nA$CI_high - nA$CI_low )/Z_crit , Symbols = Symbols ) )
+    nA <- cbind(nA, data.table(Text = myText, SE = ( nA$CI_high - nA$CI_low )/(Z_crit*2) , Symbols = Symbols ) )
     # print(nA)
     # Number of studies providing effect size for this particular electrode
     nbStudies <- nrow( nA[!is.na(nA$d)] )
@@ -858,7 +856,6 @@ metaAnalysis <- function(nameTask, Agg, d, boolPlot = F, boolSave = F){ # boolPl
   return(list(AllSimpleMean, AllWeightedMean))
 }
 
-Z_crit <- 1.96 # for two-tailed; 1.65 for one-tailed
 
 ### Motor Imagery
 SumElec <- c( 'FP2', 'F1', 'F5, F3', 'F8', 'F7', 'FC4, FC2',
@@ -869,7 +866,7 @@ SumElec <- c( 'FP2', 'F1', 'F5, F3', 'F8', 'F7', 'FC4, FC2',
 Res <- getEffectSizeMI(SumElec, Z_crit)
 MI <- Res[[1]]
 d <- Res[[2]]
-Means_MI <- metaAnalysis('MI', MI, d, boolPlot = F, boolSave = T)
+Means_MI <- metaAnalysis('MI', MI, d, Z_crit, boolPlot = F, boolSave = T, savePath)
 
 
 ### Motor Execution
@@ -879,26 +876,25 @@ SumElec <- c( 'F8', 'FC5', 'FC4, FC2', 'FC1, FC3', 'FCZ', 'FCZ',
 Res <- getEffectSizeME(SumElec, Z_crit)
 ME <- Res[[1]]
 d <- Res[[2]]
-Means_ME <- metaAnalysis('ME', ME, d, boolPlot = F, boolSave = T)
+Means_ME <- metaAnalysis('ME', ME, d, Z_crit, boolPlot = F, boolSave = T, savePath)
 
 ## SVEP
 SumElec <- c( 'P1', 'PZ', 'P2', 'PO3', 'POZ', 'PO4', 'O1', 'OZ', 'O2' )
 Res <- getEffectSizeSSVEP(SumElec, Z_crit)
 SSVEP <- Res[[1]]
 d <- Res[[2]]
-Means_SSVEP <- metaAnalysis('SSVEP', SSVEP, d, boolPlot = F, boolSave = T)
-
+Means_SSVEP <- metaAnalysis('SSVEP', SSVEP, d, Z_crit, boolPlot = F, boolSave = T, savePath)
 
 ## P300
 SumElec <- c( 'F5, FC5', 'F3, AF3', 'F4, AF4', 'F8', 'FC1, FC3',
               'FC4', 'FZ, FPZ', 'FCZ', 'FCZ', 'C2',
-              'CP3', 'CP4, P4', 'P1, P3', 'P2, P4', 'C3, CP3',
+              'C4','C3','CP3', 'CP4, P4', 'P1, P3', 'P2, P4', 
               'P7', 'P8', 'T7, TP7', 'P7, PO7', 'PO8', 'CP4, P6',
               'FT7, TP7', 'CP5', 'CP6, P6', 'PO4, O2',
               'PO3, O1', 'OZ' )
 Res <- getEffectSizeP300(SumElec, Z_crit)
 P300 <- Res[[1]]
 d <- Res[[2]]
-Means_P300 <- metaAnalysis('P300', P300, d, boolPlot = F, boolSave = T)
+Means_P300 <- metaAnalysis('P300', P300, d, Z_crit, boolPlot = F, boolSave = T, savePath)
 
 
