@@ -10,8 +10,7 @@ library(matrixStats)
 library(metaviz)
 
 # Save data folder
-# savePath <- 'your-path-to-data'
-savePath <- '/media/qinxinlan/MoreSpace/BCI/Papers/My papers/Paper Review Channel Selection/Figures/'
+savePath <- 'your-path-to-data'
 
 ## Global Variables
 Png <- '.png'; Csv <- '.csv'
@@ -41,20 +40,18 @@ checkElec <- function(d, SumElec){
 getAgg <- function(d, SumElec){
   Agg <- matrix(data=NA, nrow = length(SumElec), ncol = 3*length(names(d)))
 
-  for(nr in 1:length(SumElec) ){ # nr <- 1
+  for(nr in 1:length(SumElec) ){
     e <- str_split(SumElec[nr], ", ")[[1]]
-    for(nd in names(d) ){ # nd <- names(d)[1]
+    for(nd in names(d) ){
       de <- d[[nd]]$Elec
-      nb <- NULL; for(ei in e){ # ei <- e
+      nb <- NULL; for(ei in e){
         for(del in de){
           if(any( ei == str_split(del, ', ')[[1]]) ){
-            # print(del)
             nb <- c(nb, which(del==de)) } } }
       nb <- unique(nb)
       nc <- seq(1,3) + (which(nd==names(d))-1)*3
 
       if( length(nb) > 1 ){
-        # print(nc)
         Agg[nr, nc ] <- colMeans(as.matrix(d[[nd]][nb,c('d','CI_low','CI_high'),with=F]))
       }else if( length(nb) >  0){
         Agg[nr, nc ] <- as.matrix(d[[nd]][nb,c('d','CI_low','CI_high'),with=F])
@@ -139,7 +136,6 @@ getEffectSizeMI <- function(SumElec, Z_crit){
   # 4 groups: left-handers left hemisphere, left-handers right hem, 
   # right-handers left hem, right-handers right hem
   n <- 32/2
-  # N <- 32; n <- (96/2)*(N/4)
   # From Figure 3 (approximate values)
   # Right Hem Left-handers MAN > NONMAN and Left Hem Right-handers MAN > NONMAN
   Perc_signal_change <- c( 0.105, 0.17, 0.085  )
@@ -152,7 +148,6 @@ getEffectSizeMI <- function(SumElec, Z_crit){
 
   # From "How to Analyze Change from Baseline: Absolute or Percentage Change?" equation 4
   ttest <- Perc_signal_change/Perc_signal_change_sd
-  # ttest <- Perc_signal_change/Error_bar
   Elec <- c( 'FC2, FC4', 'CP4, C4', 'P8' )
   d[['Body_Left_Dom']] <- data.table( Subjects = 32, Trials = 96, Elec = Elec, t_to_d(ttest, 2*n-2))
 
@@ -168,7 +163,6 @@ getEffectSizeMI <- function(SumElec, Z_crit){
 
   # From "How to Analyze Change from Baseline: Absolute or Percentage Change?" equation 4
   ttest <- Perc_signal_change/Perc_signal_change_sd
-  # ttest <- Perc_signal_change/Error_bar
   Elec <- c( 'FC1, F1', 'CP3', 'P7' )
   d[['Body_Right_Dom']] <- data.table( Subjects = 32, Trials = 96, Elec = Elec, t_to_d(ttest, 2*n-2))
 
@@ -544,90 +538,113 @@ getEffectSizeP300 <- function(SumElec, Z_crit){
 bold_legend <- function(value) {
   x <- as.character(value)
   do.call(expression, lapply(x, function(y) if(str_detect(y, 'Mean')){
-    # if( str_detect(y, 'Simple') && str_detect(y, 'All') ){ Spaces <- paste0(rep(' ', 1), collapse = "") 
-    # }else if( str_detect(y, 'Simple') && str_detect(y, 'Right') ){ Spaces <- paste0(rep(' ', 3) , collapse = "") 
-    # }else if( str_detect(y, 'Simple') && str_detect(y, 'Left') ){ Spaces <- paste0(rep(' ', 2)  , collapse = "") 
-    # }
-    # print(y)
     diffNchar <- first(nchar(str_split(y, '\n')[[1]])) - last(nchar(str_split(y, '\n')[[1]]))
-    # print(diffNchar)
-    # print( abs(diffNchar)-2 )
     if( abs(diffNchar)-2 >= 0 ){ Spaces <- paste0(rep(" ", abs(diffNchar)-2 ), collapse = ""); Spaces2 <- ""
     }else{Spaces <- ""; Spaces2 <- paste0(rep(" ", abs(diffNchar) ), collapse = ""); }
-    # print(paste0('a', Spaces, 'a') )
-    # print(paste0('b', Spaces2, 'b') )
     bquote(bold(.(paste( Spaces , first(str_split(y, '\n')[[1]]), '\n', Spaces2, last(str_split(y, '\n')[[1]]) ))) )}else{y} ))
-  # Check what is working
-  # y <- nA$Study[1];  ggplot(diamonds, aes(cut)) + scale_x_discrete( name = 'test', labels = bquote( bold(.(y))), position = 'top')
 }
 
 # Forest plot
-ForestPlot <- function( toPlot , El, boolPlot = T, boolSave = F, nameFile = "" ){ # toPlot <- rbind( nA, SimpleMean, fill = TRUE )
-  # toPlot <- rbind( nA, WeightedMean, fill = TRUE )
-  # grey, red, blue
+ForestPlot <- function( toPlot , El, boolPlot = T, boolSave = F, nameFile = "" ){ 
+  # red, blue, grey
   TextColor <- "#353238"
-  myColors <- c("#353238","#92140C","#247BA0")
-  myLabels <- c( 'Left', 'Right', 'Dominant', 'Non Dominant', 'Mixed Dominant \nand Non Dominant')
+  myColors <- c("#92140C","#247BA0", "#353238")
+  myColorsSig <- c( 'Dominant', 'Non Dominant', 'Both' )
+  myLabels <- c( 'Left', 'Right', 'Dominant', 'Non Dominant', 'Mixed Dominant \n          and \n Non Dominant')
   myLabs <- c("ᐊ","ᐅ")
-  # mySymbols <- c("◀▶    Both", "◀    Left", "▶    Right" )
-  sizeText <- 10
-  sizeText2 <- 3
-  sizeSymbol <- 6
+  
+  # Add number of subjects under papers names
+  xLegends <- NULL
+  for( xl in 1:nrow(toPlot) ){ # xl <- 3
+    if( !str_detect(toPlot$Study[xl], 'Mean') ){
+      nbSpaces <- abs( nchar( toPlot$Study[xl] ) - nchar( paste0( 'N = ', toPlot$Subjects[xl] )  ) )
+      if( round(nbSpaces/2) == 0 ){ nbSpaces <- 1 }else{ nbSpaces <- round(nbSpaces/2) }
+      nbSpaces <- paste0( rep( ' ' , nbSpaces ) , collapse = "")
+      if( nchar( toPlot$Study[xl] ) > nchar( paste0( 'N = ', toPlot$Subjects[xl] )  ) ){
+        xLegends <- c( xLegends , paste0( toPlot$Study[xl], '\n', nbSpaces, 'N = ', toPlot$Subjects[xl]  )  )
+      }else{
+        xLegends <- c( xLegends , paste0( nbSpaces, toPlot$Study[xl],'\n',    'N = ', toPlot$Subjects[xl] )  )
+      }
+    }else{
+      xLegends <- c( xLegends , toPlot$Study[xl]  )
+    }
+  }
+  toPlot$Study <- xLegends
+  colS <- NULL; for( xl in 1:nrow(toPlot) ){
+    colS <- c(colS, myColors[which(myColorsSig == toPlot$Dom[xl])] ) }
+  toPlot <- cbind(toPlot, Col = colS)
+  
+  # size texts: x axis, y axis labels and ticks
+  sizeText <- 20
+  # size text under triangles
+  sizeText2 <- 5
+  # size legend right
+  sizeText3 <- 6
+  # size symbol legend right
+  sizeSymbol <- 7
+  # size triangles
+  sizeTriangle <- 10
+  # size lines
+  sizeLines <- 2
+  
   Length <- length(myLabels)
   pos.x <- rep(0, Length )
   # To change position legend, change from = XX
   pos.y <- rev(seq(from = Length - 1, by = 0.7, length.out = Length ))
   pText <- ggplot( data.table(x = pos.x-0.1, y = pos.y) , aes(x,y)) + theme_void() +
     xlab(NULL) + ylab(NULL) + xlim(-0.5, 0.5) + ylim(0,ceiling(max(pos.y))) +
-    geom_text(aes( pos.x, pos.y, label = myLabels ), colour = TextColor, hjust = 'left' ) +
-    # geom_text(aes( pos.x-0.14, pos.y, label = c(myLabs, rep(NA,3)) ), colour = TextColor, hjust = 'left', size = 5 ) + 
+    geom_text(aes( pos.x, pos.y, label = myLabels ), colour = TextColor, size = sizeText3, hjust = 'left' ) +
     geom_point(col = c(rep(TextColor , 2), rep('NA' , 3) ),
                shape = c(myLabs, rep(NA,3)) ,
                size = sizeSymbol) + 
-    geom_point(col = c(rep('NA' , 2), myColors[c(2:3,1)] ),
+    geom_point(col = c(rep('NA' , 2), myColors ), 
                shape = c(rep(NA,2), rep(19,3)) ,
                size = sizeSymbol) + 
-    theme(legend.position = 'none')
-  # dev.new(); pText
+    theme(legend.position = 'none') 
   if( min(toPlot$CI_low) > 0 ){ RangeD <- 0 }else{ RangeD <- -ceiling(abs(min(toPlot$CI_low))/0.5)*0.5 }
   RangeD <- c( RangeD, ceiling(max(toPlot$CI_high)/0.5)*0.5 )
-
+  
+  # Vertical adjustment depending on whether there are two cohen's d to write on same line
+  if( any(as.double(table(toPlot$Study)) != 1) ){
+    repName <- names(table(toPlot$Study))[which(as.double(table(toPlot$Study)) != 1)]
+    VerticalAdg <- rep(3, nrow(toPlot) )
+    VerticalAdg[toPlot$Study == repName][2] <- 5
+  }else{
+    VerticalAdg <- 3
+  }
   pPlot <- toPlot %>% ggplot( aes( x = factor( Study, 
-                                           # Ordering so that y-axis is alphabeticall ordered
-                                           # And Means are all at the end
-                                           level = c( Study[str_detect(Study, 'Mean')] ,
-                                                      rev(unique(Study[-which(str_detect(Study, 'Mean'))])[order(unique(Study[-which(str_detect(Study, 'Mean'))]))])
-                                                      ) ),
-                               y=d, ymin=CI_low, ymax=CI_high )) +
-    geom_linerange(aes(colour = Dom), size = 1 ) +
-    scale_color_manual(values = myColors,  labels=unique(toPlot$Dom)[order(unique(toPlot$Dom))]) +
+                                               # Ordering so that y-axis is alphabeticall ordered
+                                               # And Means are all at the end
+                                               level = c( Study[str_detect(Study, 'Mean')] ,
+                                                          rev(unique(Study[-which(str_detect(Study, 'Mean'))])[order(unique(Study[-which(str_detect(Study, 'Mean'))]))])
+                                               ) ),
+                                   y=d, ymin=CI_low, ymax=CI_high )) +
+    geom_linerange(aes(colour = Dom), size = sizeLines ) +
+    scale_color_manual(values = toPlot$Col ) +
     geom_text(aes(x=Study, y = d, colour = Dom, label = Symbols),
               vjust = 0.3, hjust = 0.5,
-              size = 7, family = "HiraKakuPro-W3") + 
-    geom_text(aes(x=Study, y = d, label = Text), vjust = 2.5, size = sizeText2, color = TextColor ) + 
+              size = sizeTriangle, family = "HiraKakuPro-W3") + 
+    geom_text(aes(x=Study, y = d, label = Text, vjust = VerticalAdg ), size = sizeText2, color = TextColor ) +  
     geom_hline(yintercept = 0, linetype=2) +
     coord_flip() +
     xlab('Study') +
     ylab(paste0("Cohen's d for ", El)) + 
+    # Mean in bold
     scale_x_discrete( labels =  bold_legend ) +
     scale_y_continuous( limits = RangeD ) + 
-    theme_light() +
-    theme(legend.position = 'none', panel.border = element_blank(), axis.text.y = element_text(hjust = 1) ) # ,
-          # axis.text.y = element_text(face=c(rep("",5),rep("bold",3)), colour = 'red') ) 
+    theme_light(base_size = sizeText, base_family = "Roboto Condensed") +
+    theme(legend.position = 'none', panel.border = element_blank(), axis.text.y = element_text(hjust = 0.5) ) # ,
   
   if(any(toPlot$CI_low<0)){ print('Negative values!')}
-  # dev.new(); pPlot
   
-  # Mean in bold
-  
-  g <-  ggarrange( pPlot , pText, ncol = 2, nrow = 1, widths = c(5,1) )
+  g <-  ggarrange( pPlot , pText, ncol = 2, nrow = 1, widths = c(3,1) )
   if(boolPlot){ dev.new(width = 40, height = 20, units = "cm" ); print(g) }
   if( boolSave && !file.exists(nameFile) ){ ggsave(file = nameFile, g , width = 40, height = 20, units = "cm" , dpi = 300  ) }
   
 }
 
 # Meta-analysis
-metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, savePath){ 
+metaAnalysis <- function(nameTask, Agg, d, Z_crit, Distinction = F, boolPlot = F, boolSave = F, savePath){ 
   savePath <- file.path(savePath, paste0( 'Cohen_' , nameTask))
   if(boolSave && !dir.exists(savePath)){ dir.create(savePath) }
   
@@ -671,7 +688,6 @@ metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, s
                                                                round(nA$CI_high[nr], digits = 2), '] ' ) ) }
     
     nA <- cbind(nA, data.table(Text = myText, SE = ( nA$CI_high - nA$CI_low )/(Z_crit*2) , Symbols = Symbols ) )
-    # print(nA)
     # Number of studies providing effect size for this particular electrode
     nbStudies <- nrow( nA[!is.na(nA$d)] )
     
@@ -679,8 +695,6 @@ metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, s
       print(El)
       SimpleMean <- WeightedMean <- NULL
       
-      # For motor-related task, distinction between hand used
-      Distinction <- F
       if( Distinction ){
         if( str_detect(nameTask, 'M') ){
           for(ha in unique(nA$Hand)[order(unique(nA$Hand))] ){ # ha <- unique(nA$Hand)[order(unique(nA$Hand))][1]
@@ -785,7 +799,6 @@ metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, s
       }
       # If no distinction is made
       nameFile <- file.path(savePath, paste0('Simple Mean ', nameTask, ' ', El, Png))
-      # print(nameFile)
       ForestPlot(rbind( nA, SimpleMean, fill = TRUE ) , El , boolPlot, boolSave , nameFile = nameFile)
       
       nameFile <- file.path(savePath, paste0('Weighted Mean ', nameTask, ' ', El, Png))
@@ -815,6 +828,8 @@ metaAnalysis <- function(nameTask, Agg, d, Z_crit, boolPlot = F, boolSave = F, s
   return(list(AllSimpleMean, AllWeightedMean))
 }
 
+# For motor-related task, distinction between hand used
+Distinction <- T
 
 ### Motor Imagery
 SumElec <- c( 'FP2', 'F1', 'F5, F3', 'F8', 'F7', 'FC4, FC2',
@@ -825,7 +840,7 @@ SumElec <- c( 'FP2', 'F1', 'F5, F3', 'F8', 'F7', 'FC4, FC2',
 Res <- getEffectSizeMI(SumElec, Z_crit)
 MI <- Res[[1]]
 d <- Res[[2]]
-Means_MI <- metaAnalysis('MI', MI, d, Z_crit, boolPlot = F, boolSave = T, savePath)
+Means_MI <- metaAnalysis('MI', MI, d, Z_crit, Distinction, boolPlot = F, boolSave = T, savePath)
 
 
 ### Motor Execution
@@ -835,7 +850,7 @@ SumElec <- c( 'F8', 'FC5', 'FC4, FC2', 'FC1, FC3', 'FCZ', 'FCZ',
 Res <- getEffectSizeME(SumElec, Z_crit)
 ME <- Res[[1]]
 d <- Res[[2]]
-Means_ME <- metaAnalysis('ME', ME, d, Z_crit, boolPlot = F, boolSave = T, savePath)
+Means_ME <- metaAnalysis('ME', ME, d, Z_crit, Distinction, boolPlot = F, boolSave = T, savePath)
 
 ## P300
 SumElec <- c( 'F5, FC5', 'F3, AF3', 'F4, AF4', 'F8', 'FC1, FC3',
@@ -847,4 +862,4 @@ SumElec <- c( 'F5, FC5', 'F3, AF3', 'F4, AF4', 'F8', 'FC1, FC3',
 Res <- getEffectSizeP300(SumElec, Z_crit)
 P300 <- Res[[1]]
 d <- Res[[2]]
-Means_P300 <- metaAnalysis('P300', P300, d, Z_crit, boolPlot = F, boolSave = T, savePath)
+Means_P300 <- metaAnalysis('P300', P300, d, Z_crit, Distinction = F, boolPlot = F, boolSave = T, savePath)
