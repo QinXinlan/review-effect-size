@@ -17,6 +17,36 @@ Png <- '.png'; Csv <- '.csv'
 Z_crit <- 1.96 # for two-tailed; 1.65 for one-tailed
 
 ## Functions
+# Sample size estimation
+sampleSizeEst <- function(dHyp = 1, nHyp = 10, tau2Hyp = 1){
+  ## How Many Studies Do You Need? A Primer on Statistical Power for Meta-Analysis
+  # When the overall effect is statistically significantly different from zero, 
+  # the Z statistic has a normal distribution with a mean equal to lambda  
+  ## For fixed effect analysis
+  # Equation 6: lambda = (MeanES - 0)/sqrt(VarES/k)
+  # The standard normal cumulative distribution function that yields a value of 0.2 
+  # (i.e. a power of 0.8) is -0.842 ( =qnorm(0.2) )
+  Z_crit <- 1.64 # 1.96 for two-tailed; 1.65 for one-tailed
+  lambda <- Z_crit-qnorm(0.2)
+  # which means that 1.64-(-0.842) or 2.482 is the value for which we need to solve
+  # 2.482 is the value of lambda that delivers power of 0.8
+  # k = VarES/(MeanES/lambda)^2  
+  varHyp <- (2/nHyp) + (dHyp^2)/(4*nHyp) # equation 4
+  k_fix_Hyp <- varHyp/(dHyp/lambda)^2
+  writeLines(paste0('Number of studies required for FIXED effect analysis with hypothesized Cohen d = ', 
+                    dHyp, ': \n', round(k_fix_Hyp,2), '\n'))  
+  ## For random effects analysis
+  # lambda* = (MeanES - 0)/sqrt(VarES*/k)
+  # random effects variance associated with the weighted mean effect size:
+  # typical sampling variance of the random effects estimate of an effect size:
+  # v* = v + tau^2 (equation 13)
+  VarES_RE <- varHyp + tau2Hyp  
+  k_RE_Hyp <- VarES_RE/(dHyp/lambda)^2
+  writeLines(paste0('Number of studies required for RANDOM effect analysis with hypothesized Cohen d = ', 
+                    dHyp, ': \n', round(k_RE_Hyp,2), '\n'))
+}
+
+
 # Check if all elec in SumElec correspond to the ones in d
 checkElec <- function(d, SumElec){
   ## Check if all electrodes in SumElec have been used in d
