@@ -1,0 +1,71 @@
+Labels,MNI_x,MNI_y,MNI_z,SPINV_x,SPINV_y,SPINV_z,Talairach x,Talairach x stdev,Talairach y,Talairach y stdev,Talairach z,Talairach z stdev,Anatomical Structure,Gyri,Brodmann Area
+FP1,-27,84,-11,-26.81,84.06,-10.56,-21.2,4.7,66.9,3.8,12.1,6.6,Left Frontal Lobe,Superior frontal Gyrus,10
+FPZ,1,86,-4,1.14,86.49,-3.79,1.4,2.9,65.1,5.6,11.3,6.8,Median Frontal Lobe,Bilat. medial ,10
+FP2,29,84,-10,29.41,83.74,-10.04,24.3,3.2,66.3,3.5,12.5,6.1,Right Frontal Lobe,Superior frontal Gyrus,10
+AF7,-51,68,-15,-51.22,68.2,-14.91,-41.7,4.5,52.8,5.4,11.3,6.8,Left Frontal Lobe,Middle frontal Gyrus,10
+AF3,-33,76,20,-32.69,76.35,19.76,-32.7,4.9,48.4,6.7,32.8,6.4,Left Frontal Lobe,Superior frontal Gyrus,9
+AFZ,1,80,34,1.25,79.68,33.7,1.8,3.8,54.8,7.3,37.9,8.6,Median Frontal Lobe,Bilat. medial ,9
+AF4,35,76,21,35.13,75.84,20.72,35.1,3.9,50.1,5.3,31.1,7.5,Right Frontal Lobe,Superior frontal Gyrus,9
+AF8,54,68,-14,53.61,67.74,-14.46,43.9,3.3,52.7,5,9.3,6.5,Right Frontal Lobe,Middle frontal Gyrus,10
+F7,-67,42,-16,-66.99,41.69,-15.96,-52.1,3,28.6,6.4,3.8,5.6,Left Frontal Lobe,Inferior frontal Gyrus,45
+F5,-63,47,14,-62.61,47.12,13.96,-51.4,3.8,26.7,7.2,24.7,9.4,Left Frontal Lobe,Middle frontal Gyrus,46
+F3,-48,52,40,-48.05,51.87,39.87,-39.7,5,25.3,7.5,44.7,7.9,Left Frontal Lobe,Middle frontal Gyrus,8
+F1,-26,55,59,-25.74,55.24,58.7,-22.1,6.1,26.8,7.2,54.9,6.7,Left Frontal Lobe,Superior frontal Gyrus,6
+Fz,1,57,66,0.9,57.01,66.36,0,6.4,26.8,7.9,60.6,6.5,Median Frontal Lobe,Bilat. medial ,6
+F2,28,55,60,27.94,55.43,59.76,23.6,5,28.2,7.4,55.6,6.2,Right Frontal Lobe,Superior frontal Gyrus,6
+F4,50,52,41,50.38,51.84,41.33,41.9,4.8,27.5,7.3,43.9,7.6,Right Frontal Lobe,Middle frontal Gyrus,8
+F6,65,47,15,64.62,46.78,14.79,52.9,3.6,28.7,7.2,25.2,7.4,Right Frontal Lobe,Middle frontal Gyrus,46
+F8,69,41,-15,68.71,41.16,-15.31,53.2,2.8,28.4,6.3,3.1,6.9,Right Frontal Lobe,Inferior frontal Gyrus,45
+FT9,-76,12,-57,-76.06,12.16,-56.71,-53.8,3.3,-2.1,6,-29.1,6.3,Left Temporal Lobe,Inferior temporal Gyrus,20
+FT7,-77,13,-15,-76.93,13.18,-14.71,-59.2,3.1,3.4,5.6,-2.1,7.5,Left Temporal Lobe,Superior temporal Gyrus,22
+FC5,-74,18,22,-74.34,17.51,22.41,-59.1,3.7,3,6.1,26.1,5.8,Left Frontal Lobe,Precentral Gyrus ,6
+FC3,-59,21,55,-58.83,21.02,54.82,-45.5,5.5,2.4,8.3,51.3,6.2,Left Frontal Lobe,Middle frontal Gyrus,6
+FC1,-32,23,78,-31.71,23.1,77.98,-24.7,5.7,0.3,8.5,66.4,4.6,Left Frontal Lobe,Superior frontal Gyrus,6
+FCz,1,25,88,0.57,24.63,87.63,1,5.1,1,8.4,72.8,6.6,Median Frontal Lobe,Superior frontal Gyrus,6
+FC2,33,24,78,33.06,23.57,78.33,26.1,4.9,3.2,9,66,5.6,Right Frontal Lobe,Superior frontal Gyrus,6
+FC4,60,21,56,60.29,21.16,55.58,47.5,4.4,4.6,7.6,49.7,6.7,Right Frontal Lobe,Middle frontal Gyrus,6
+FC6,76,17,23,76.41,17.39,23.06,60.5,2.8,4.9,7.3,25.5,7.8,Right Frontal Lobe,Precentral Gyrus ,6
+FT8,78,13,-14,78.31,12.78,-14.33,60.2,2.5,4.7,5.1,-2.8,6.3,Right Temporal Lobe,Superior temporal Gyrus,22
+FT10,77,12,-56,77.4,12.15,-55.93,55,3.2,-3.6,5.6,-31,7.9,Right Temporal Lobe,Inferior temporal Gyrus,20
+T7/T3,-83,-17,-13,-83.36,-16.52,-12.65,-65.8,3.3,-17.8,6.8,-2.9,6.1,Left Temporal Lobe,Middle temporal Gyrus,21
+C5,-81,-15,29,-80.91,-14.68,28.57,-63.6,3.3,-18.9,7.8,25.8,5.8,Left Parietal Lobe,Postcentral Gyrus ,123
+C3,-66,-13,65,-65.57,-13.25,64.98,-49.1,5.5,-20.7,9.1,53.2,6.1,Left Parietal Lobe,Postcentral Gyrus ,123
+C1,-35,-12,89,-35.28,-12.01,88.9,-25.1,5.6,-22.5,9.2,70.1,5.3,Left Frontal Lobe,Precentral Gyrus ,4
+Cz,0,-11,100,0.23,-11.28,99.81,0.8,4.9,-21.9,9.4,77.4,6.7,Median Frontal Lobe,Precentral Gyrus ,4
+C2,36,-12,89,36.27,-11.81,89.34,26.7,5.3,-20.9,9.1,69.5,5.2,Right Frontal Lobe,Precentral Gyrus ,4
+C4,67,-13,65,66.5,-12.8,65.11,50.3,4.6,-18.8,8.3,53,6.4,Right Parietal Lobe,Postcentral Gyrus ,123
+C6,82,-15,29,82.3,-14.84,28.53,65.2,2.6,-18,7.1,26.4,6.4,Right Parietal Lobe,Postcentral Gyrus ,123
+T8/T4,84,-17,-12,84.44,-16.65,-11.79,67.4,2.3,-18.5,6.9,-3.4,7,Right Temporal Lobe,Middle temporal Gyrus,21
+TP7,-82,-47,-9,-81.59,-46.89,-9,-63.6,4.5,-44.7,7.2,-4,6.6,Left Temporal Lobe,Middle temporal Gyrus,21
+CP5,-79,-48,32,-79.2,-47.79,31.66,-61.8,4.7,-46.2,8,22.5,7.6,Left Parietal Lobe,Supramarginal Gyrus ,40
+CP3,-66,-48,69,-65.51,-48.48,68.57,-46.9,5.8,-47.7,9.3,49.7,7.7,Left Parietal Lobe,Inferior parietal Gyrus,40
+CP1,-36,-49,91,-35.96,-48.88,91.42,-24,6.4,-49.1,9.9,66.1,8,Left Parietal Lobe,Postcentral Gyrus ,7
+CPZ,0,-49,98,-0.42,-48.77,98.37,0.7,4.9,-47.9,9.3,72.6,7.7,Median Parietal Lobe,Postcentral Gyrus ,7
+CP2,36,-49,92,35.55,-48.75,91.92,25.8,6.2,-47.1,9.2,66,7.5,Right Parietal Lobe,Postcentral Gyrus ,7
+CP4,65,-48,69,65.03,-48.35,68.57,49.5,5.9,-45.5,7.9,50.7,7.1,Right Parietal Lobe,Inferior parietal Gyrus,40
+CP6,80,-48,32,79.61,-47.83,31.9,62.9,3.7,-44.6,6.8,24.4,8.4,Right Parietal Lobe,Supramarginal Gyrus ,40
+TP8,82,-47,-9,82.33,-46.75,-8.91,64.6,3.3,-45.4,6.6,-3.7,7.3,Right Temporal Lobe,Middle temporal Gyrus,21
+P9,-67,-74,-45,-67.42,-74.11,-44.53,-50.8,4.7,-51.3,8.6,-37.7,8.3,Left Temporal Lobe,Tonsile,Not Pertinent
+P7/T5,-71,-75,-4,-71.46,-75.17,-3.7,-55.9,4.5,-64.8,5.3,0,9.3,Left Temporal Lobe,Inferior temporal Gyrus,37
+P5,-68,-78,30,-67.76,-77.87,29.56,-52.7,5,-67.1,6.8,19.9,10.4,Left Temporal Lobe,Middle temporal Gyrus,39
+P3,-55,-80,59,-55.07,-80.11,59.44,-41.4,5.7,-67.8,8.4,42.4,9.5,Left Parietal Lobe,Precuneus  ,19
+P1,-31,-82,78,-30.65,-81.86,77.89,-21.6,5.8,-71.3,9.3,52.6,10.1,Left Parietal Lobe,Precuneus  ,7
+Pz,-1,-82,82,-0.87,-82.23,82.43,0.7,6.3,-69.3,8.4,56.9,9.9,Median Parietal Lobe,Superior parietal Lobule,7
+P2,29,-82,78,29.11,-81.54,78.13,24.4,6.3,-69.9,8.5,53.5,9.4,Right Parietal Lobe,Precuneus  ,7
+P4,54,-80,59,53.51,-80.13,59.4,44.2,6.5,-65.8,8.1,42.7,8.5,Right Parietal Lobe,Inferior parietal Lobule,7
+P6,67,-78,30,66.78,-77.87,29.68,54.4,4.3,-65.3,6,20.2,9.4,Right Temporal Lobe,Middle temporal Gyrus,39
+P8/T6,71,-75,-4,71.1,-75.17,-3.69,56.4,3.7,-64.4,5.6,0.1,8.5,Right Temporal Lobe,Inferior temporal Gyrus,19
+P10,69,-74,-44,68.5,-74.41,-44.45,51,3.5,-53.9,8.7,-36.5,10,Left Occipital Lobe,Tonsile  ,Not Pertinent
+PO7,-54,-99,3,-53.82,-99.37,2.66,-44,4.7,-81.7,4.9,1.6,10.6,Left Occipital Lobe,Middle occipital Gyrus,18
+PO5,-48,-101,23,-47.83,-101.21,23.44,-43.4,,-99.7,,13.6,,Left Occipital Lobe,,19
+PO3,-36,-103,40,-36.38,-102.71,40.17,-33.3,6.3,-84.3,5.7,26.5,11.4,Left Occipital Lobe,Superior occipital Gyrus,19
+POZ,-1,-105,52,-1.46,-104.92,52.42,0,6.5,-87.9,6.9,33.5,11.9,Median Occipital Lobe,Cuneus  ,19
+PO4,34,-103,40,34.29,-102.91,39.96,35.2,6.5,-82.6,6.4,26.1,9.7,Right Occipital Lobe,Superior occipital Gyrus,19
+PO6,47,-101,23,46.62,-101.16,23.15,43,,-99.8,,13.7,,Right Occipital Lobe,,19
+PO8,53,-99,3,53.04,-99.28,2.78,43.3,4,-82,5.5,0.7,10.7,Right Occipital Lobe,Middle occipital Gyrus,18
+I1/CB1,-28,-114,-29,-27.61,-113.68,-29.05,-27,,-114.4,,-31.9,,Left Occipital Lobe,,18
+O1,-29,-115,10,-28.98,-114.52,9.67,-25.8,6.3,-93.3,4.6,7.7,12.3,Left Occipital Lobe,Middle occipital Gyrus,18
+OZ,-1,-118,16,-1.41,-117.79,15.84,0.3,5.9,-97.1,5.2,8.7,11.6,Median Occipital Lobe,Cuneus  ,18
+O2,27,-115,9,26.89,-114.68,9.45,25,5.7,-95.2,5.8,6.2,11.4,Right Occipital Lobe,Middle occipital Gyrus,18
+I2/CB2,25,-114,-29,25.35,-114.31,-29.44,25.4,,-114.1,,-31.9,,Right Occipital Lobe,,18
+IZ,,,,,,,-0.8,,-118.3,,-26.7,,Median Occipital Lobe,,
